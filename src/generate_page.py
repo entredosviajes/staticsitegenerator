@@ -10,9 +10,10 @@ def generate_page(from_path, template_path, dest_path):
         from_string = f.read()
     node = markdown_to_html_node(from_string)
     html = node.to_html()
-    print('ZE', from_string)
+    print('ZE', html)
     title = extract_title(from_string)
     template_string = template_string.replace('{{ Title }}', title).replace('{{ Content }}', html)
     with open(dest_path, "w") as f:
         f.write(template_string)
 
+#generate_page('content/index.md', 'template.html', '')

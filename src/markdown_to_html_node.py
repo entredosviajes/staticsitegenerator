@@ -23,6 +23,8 @@ def text_to_children(text):
             html = LeafNode('a', i.text, {'href': i.url})
         if i.text_type == TextType.IMAGE:
             html = LeafNode('img', '', {'src': i.url, 'alt': i.text})
+        if i.text_type == TextType.CODE:
+            html = LeafNode('code', i.text)
         html_nodes.append(html)
     return html_nodes
 
@@ -35,11 +37,8 @@ def markdown_to_html_node(markdown):
             children = text_to_children(block)
             html_node = ParentNode('p', children)
         if block_type == BlockType.QUOTE:
-            quoted_lines = map(
-                text_to_children,
-                re.findall(QUOTE_PATTERN, block, re.MULTILINE)
-            )
-            html_node = ParentNode('q', quoted_lines)
+            quoted_lines = re.findall(QUOTE_PATTERN, block, re.MULTILINE)
+            html_node = ParentNode('blockquote', quoted_lines)
         if block_type == BlockType.HEADING:
             hashes, content = re.findall(H_PATTERN, block, re.MULTILINE)[0]
             level = len(hashes)
@@ -48,7 +47,7 @@ def markdown_to_html_node(markdown):
             html_node = ParentNode(f'h{level}', children)
         if block_type == BlockType.CODE:
             print('code block ->', block)
-            html_node = LeafNode('code', block)
+            html_node = LeafNode('code', block.replace('`', ''))
         if block_type == BlockType.UNORDERED_LIST:
             list_items = map(
                 lambda x: x.strip(),

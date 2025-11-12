@@ -2,7 +2,7 @@ import re
 from enum import Enum
 
 HEADING_PATTERN = r'(#{1,6}\s+.+)'
-CODE_BLOCK_PATTERN = r'```(?:\w*)\s*```'
+CODE_BLOCK_PATTERN = r"`([^`]+)`|(?:```([^\n]*)\n([\s\S]*?)\n```)" 
 QUOTE_PATTERN = r'>\s?.*'
 UNORDERED_LIST_PATTERN = r'-\s{1}.+'
 ORDERED_LIST_PATTERN = r'\d+\.\s{1}.+'
@@ -23,8 +23,6 @@ def markdown_to_blocks(markdown):
     return res
 
 def block_to_block_type(markdown):
-    if re.findall(CODE_BLOCK_PATTERN, markdown):
-        return BlockType.CODE
     if re.findall(QUOTE_PATTERN, markdown):
         return BlockType.QUOTE
     if re.findall(UNORDERED_LIST_PATTERN, markdown):
@@ -33,4 +31,6 @@ def block_to_block_type(markdown):
         return BlockType.ORDERED_LIST
     if re.findall(HEADING_PATTERN, markdown):
         return BlockType.HEADING
+    if re.findall(CODE_BLOCK_PATTERN, markdown):
+        return BlockType.CODE
     return BlockType.PARAGRAPH

@@ -14,7 +14,7 @@ class ParentNode(HTMLNode):
         childrenStr = ''
         for child in self.children:
             print(child)
-            childrenStr += child.to_html()
+            childrenStr += child if isinstance(child, str) else child.to_html()
         return f"<{self.tag}{props}>{childrenStr}</{self.tag}>"
 
 
