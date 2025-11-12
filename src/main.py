@@ -3,7 +3,8 @@ from copy_dir_content import *
 from generate_pages_recursive import *
 
 def main():
-    copy_dir_content('static', 'public')
-    generate_pages_recursive('content', 'template.html', 'public')
+    basepath = '/' if len(sys.argv) == 1 else sys.argv[1]
+    copy_dir_content('static', 'docs')
+    generate_pages_recursive(basepath, 'content', 'template.html', 'docs')
 
 main()
